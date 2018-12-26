@@ -86,6 +86,18 @@ func TestDistanceTable(t *testing.T) {
 			size:     2,
 			expected: "[[0 0] [0 0]]",
 		},
+		{
+			name:     "two coords",
+			coords:   []coordinate{{0, 0}, {2, 2}},
+			size:     3,
+			expected: "[[0 0 .] [0 . 1] [. 1 1]]",
+		},
+		{
+			name:     "two coords",
+			coords:   []coordinate{{1, 1}, {1, 6}, {8, 3}, {3, 4}, {5, 5}, {8, 9}},
+			size:     10,
+			expected: "[[0 0 0 0 0 . 2 2 2 2] [0 0 0 0 0 . 2 2 2 2] [0 0 0 3 3 4 2 2 2 2] [0 0 3 3 3 4 2 2 2 2] [. . 3 3 3 4 2 2 2 2] [1 1 . 3 4 4 4 4 2 2] [1 1 1 . 4 4 4 4 . .] [1 1 1 . 4 4 4 5 5 5] [1 1 1 . 4 4 5 5 5 5] [1 1 1 . 5 5 5 5 5 5]]",
+		},
 	}
 
 	for _, tt := range tests {
