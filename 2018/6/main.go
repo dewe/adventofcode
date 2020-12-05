@@ -60,6 +60,56 @@ func maxArea(coords []coordinate) int {
 	return 0
 }
 
+func makeDistanceTable(coords []coordinate) [][]string {
+	_, max := minAndMax(coords)
+	sizex, sizey := max.x+1, max.y+1
+
+	distTable := make([][]string, sizey)
+	for y := range distTable {
+		distTable[y] = make([]string, sizex)
+	}
+
+	for y := range distTable {
+		for x := range distTable[y] {
+			// c := closest(coordinate{x, y}, coords)
+			// base := int('a')
+
+			// println(c, base, string(base+c))
+
+			distTable[y][x] = closest2(coordinate{x, y}, coords)
+		}
+	}
+
+	return distTable
+}
+
+func removeEdgeVales(distTable [][]string) [][]string {
+	removeMap := map[string]int{}
+
+	for _, s := range distTable[0] {
+		if s != "." {
+			removeMap[s]++
+		}
+	}
+
+	for _, s := range distTable[len(distTable)-1] {
+		if s != "." {
+			removeMap[s]++
+		}
+	}
+
+	for y := range distTable {
+		for x := range distTable[y] {
+			s := strings.ToLower(distTable[y][x])
+			if removeMap[s] > 0 {
+				distTable[y][x] = "."
+			}
+		}
+	}
+
+	return distTable
+}
+
 func distanceTable(coords []coordinate, table [][]string) [][]string {
 
 	// calculate closest manhattan distance for all locations
@@ -99,6 +149,39 @@ func closest(loc coordinate, coords []coordinate) string {
 
 	return fmt.Sprint(closest[0])
 
+}
+
+func closest2(loc coordinate, coords []coordinate) string {
+	mindist := 10000000000
+	closest := []int{}
+
+	for index, coord := range coords {
+		d := distance(loc, coord)
+
+		if d == mindist {
+			closest = append(closest, index)
+		}
+
+		if d < mindist {
+			closest = []int{index}
+			mindist = d
+		}
+	}
+
+	if len(closest) != 1 {
+		return "."
+	}
+
+	index := closest[0]
+
+	base := int('a')
+	s := string(base + index)
+
+	if coords[index] == loc {
+		s = strings.ToUpper(s)
+	}
+
+	return s
 }
 
 func minAndMax(coords []coordinate) (coordinate, coordinate) {
